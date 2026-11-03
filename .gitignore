@@ -7,3 +7,6 @@ artifacts/
 *.laccdb
 .idea/
 appsettings.*.local.json
+
+# Cartelle create su macOS/Linux con il separatore Windows nel nome (es. "bin\Debug"): non devono finire nel repo
+*\\*
