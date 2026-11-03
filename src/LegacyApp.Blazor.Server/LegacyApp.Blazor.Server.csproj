@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!--
+    Host Blazor Server: la UI gira sul server, il browser riceve le differenze del DOM via SignalR (WebSocket).
+    Le chiamate HTTP all'API partono dal server (nessun CORS).
+    In produzione con piu' istanze servono sticky session o Azure SignalR Service.
+    Qui non c'e' UI: le pagine stanno in LegacyApp.Blazor.Shared.
+  -->
+  <PropertyGroup>
+    <RootNamespace>LegacyApp.Blazor.Server</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../LegacyApp.Blazor.Shared/LegacyApp.Blazor.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

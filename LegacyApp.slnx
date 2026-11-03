@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="README.md" />
+    <File Path="BLAZOR.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/LegacyApp.Data/LegacyApp.Data.vbproj" />
+    <Project Path="src/LegacyApp.Api/LegacyApp.Api.vbproj" />
+    <Project Path="src/LegacyApp.Client/LegacyApp.Client.vbproj" />
+    <Project Path="src/LegacyApp.WinForms/LegacyApp.WinForms.vbproj" />
+    <Project Path="src/LegacyApp.Blazor.Shared/LegacyApp.Blazor.Shared.csproj" />
+    <Project Path="src/LegacyApp.Blazor.Server/LegacyApp.Blazor.Server.csproj" />
+    <Project Path="src/LegacyApp.Blazor.Wasm/LegacyApp.Blazor.Wasm.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <File Path="tools/scaffold/scaffold-access.ps1" />
+    <File Path="tools/sample-db/create-sample-db.ps1" />
+    <File Path="tools/access/ensure-dual-table.ps1" />
+  </Folder>
+</Solution>

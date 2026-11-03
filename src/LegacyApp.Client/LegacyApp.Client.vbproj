@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Client tipizzato della REST API, senza dipendenze NuGet (System.Net.Http.Json e System.Text.Json sono nel framework).
+    Usabile da WinForms, WPF, console, servizi.
+    Per l'app legacy su .NET Framework: <TargetFrameworks>net10.0;net48</TargetFrameworks>
+    piu' i pacchetti System.Net.Http.Json e System.Text.Json per net48.
+  -->
+  <PropertyGroup>
+    <RootNamespace>LegacyApp.Client</RootNamespace>
+    <AssemblyName>LegacyApp.Client</AssemblyName>
+    <!-- Nessun codice nativo: niente vincolo di bitness lato client -->
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Import Include="System" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Threading" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+
+</Project>

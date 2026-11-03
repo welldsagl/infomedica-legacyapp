@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <!--
+    Razor Class Library: TUTTA la UI Blazor (pagine, componenti, layout, CSS).
+    Non sa in quale hosting model gira: la stessa DLL e' usata da
+      - LegacyApp.Blazor.Server  (Blazor Server, SignalR)
+      - LegacyApp.Blazor.Wasm    (Blazor WebAssembly, gira nel browser)
+    Parla con l'API solo tramite LegacyApp.Client (VB): DTO, client HTTP e validazione sono condivisi
+    con la WinForms, qui non esiste nessuna copia dei contratti.
+    Unico C# della soluzione: i componenti Razor non supportano VB.
+  -->
+  <PropertyGroup>
+    <RootNamespace>LegacyApp.Blazor.Shared</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Nessun codice nativo: nessun vincolo di bitness (vedi Directory.Build.props) -->
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Segnala a compilatore/analyzer che il codice puo' girare nel browser (WebAssembly) -->
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../LegacyApp.Client/LegacyApp.Client.vbproj" />
+  </ItemGroup>
+
+</Project>

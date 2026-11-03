@@ -1,0 +1,70 @@
+@*
+    Form di creazione/modifica. Validazione lato client con ClienteRequestValidator (VB, stesse regole della API);
+    gli errori 400 del server arrivano dal genitore tramite FieldErrors e si mostrano sugli stessi campi.
+*@
+<EditForm Model="Model" OnSubmit="HandleSubmit" class="form">
+    <ErrorBox Message="@Error" />
+
+    <div class="field">
+        <label for="ragioneSociale">Ragione sociale <span class="req">*</span></label>
+        <input id="ragioneSociale" class="@Css(nameof(Model.RagioneSociale))" @bind="Model.RagioneSociale" maxlength="255" disabled="@Busy" />
+        <FieldError Message="@ErrorFor(nameof(Model.RagioneSociale))" />
+    </div>
+
+    <div class="field">
+        <label for="partitaIva">Partita IVA</label>
+        <input id="partitaIva" class="@Css(nameof(Model.PartitaIva))" @bind="Model.PartitaIva" maxlength="11" inputmode="numeric" disabled="@Busy" />
+        <FieldError Message="@ErrorFor(nameof(Model.PartitaIva))" />
+    </div>
+
+    <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" class="@Css(nameof(Model.Email))" @bind="Model.Email" maxlength="255" disabled="@Busy" />
+        <FieldError Message="@ErrorFor(nameof(Model.Email))" />
+    </div>
+
+    <div class="field field-check">
+        <label><input type="checkbox" @bind="Model.Attivo" disabled="@Busy" /> Cliente attivo</label>
+    </div>
+
+    <div class="actions">
+        <button type="button" class="btn" @onclick="OnCancel" disabled="@Busy">Annulla</button>
+        <button type="submit" class="btn btn-primary" disabled="@Busy">@SubmitLabel</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter, EditorRequired] public ClienteFormModel Model { get; set; } = new();
+    [Parameter] public string SubmitLabel { get; set; } = "Salva";
+    [Parameter] public bool Busy { get; set; }
+    [Parameter] public string? Error { get; set; }
+    [Parameter] public IReadOnlyDictionary<string, string>? FieldErrors { get; set; }
+    [Parameter] public EventCallback<ClienteRequest> OnValidSubmit { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    private IReadOnlyDictionary<string, string> _clientErrors = EmptyErrors;
+
+    private static readonly IReadOnlyDictionary<string, string> EmptyErrors =
+        new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+    private async Task HandleSubmit()
+    {
+        var request = Model.ToRequest();
+        _clientErrors = ClienteRequestValidator.Validate(request);
+        if (_clientErrors.Count > 0)
+        {
+            return;
+        }
+
+        await OnValidSubmit.InvokeAsync(request);
+    }
+
+    private string? ErrorFor(string field)
+    {
+        if (_clientErrors.TryGetValue(field, out var local)) return local;
+        if (FieldErrors is not null && FieldErrors.TryGetValue(field, out var server)) return server;
+        return null;
+    }
+
+    private string Css(string field) => ErrorFor(field) is null ? "input" : "input invalid";
+}

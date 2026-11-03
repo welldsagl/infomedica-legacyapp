@@ -1,0 +1,44 @@
+@page "/clienti/nuovo"
+@inject LegacyApiClient Api
+@inject NavigationManager Nav
+
+<PageTitle>Nuovo cliente</PageTitle>
+
+<p><a href="clienti">&lsaquo; Tutti i clienti</a></p>
+<h1>Nuovo cliente</h1>
+
+<ClienteForm Model="_model" SubmitLabel="Crea" Busy="_busy" Error="@_error" FieldErrors="_fieldErrors"
+             OnValidSubmit="SaveAsync" OnCancel="Cancel" />
+
+@code {
+    private readonly ClienteFormModel _model = new();
+    private bool _busy;
+    private string? _error;
+    private IReadOnlyDictionary<string, string>? _fieldErrors;
+
+    private async Task SaveAsync(ClienteRequest request)
+    {
+        _busy = true;
+        _error = null;
+        _fieldErrors = null;
+        try
+        {
+            var created = await Api.CreateClienteAsync(request);
+            Nav.NavigateTo($"clienti/{created.Id}");
+        }
+        catch (ApiException ex) when (ex.IsValidationError)
+        {
+            _fieldErrors = ErrorMessages.FieldErrors(ex);
+        }
+        catch (Exception ex)
+        {
+            _error = ErrorMessages.From(ex);
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+
+    private void Cancel() => Nav.NavigateTo("clienti");
+}

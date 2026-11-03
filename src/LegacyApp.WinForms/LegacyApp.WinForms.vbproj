@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>LegacyApp.WinForms</RootNamespace>
+    <AssemblyName>LegacyApp.WinForms</AssemblyName>
+    <StartupObject>LegacyApp.WinForms.Program</StartupObject>
+    <!-- Sub Main personalizzato invece dell'Application Framework di VB (My.Application) -->
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <!-- Il client parla HTTP: nessun driver nativo, quindi nessun vincolo di bitness -->
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+    <!-- Permette di compilare (non di eseguire) il progetto anche su macOS/Linux, es. "Build Solution" in Rider -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LegacyApp.Client\LegacyApp.Client.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Import Include="System" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Threading" />
+    <Import Include="System.Threading.Tasks" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,77 @@
+@page "/clienti/{Id:int}/modifica"
+@inject LegacyApiClient Api
+@inject NavigationManager Nav
+
+<PageTitle>Modifica cliente</PageTitle>
+
+<p><a href="clienti/@Id">&lsaquo; Dettaglio cliente</a></p>
+<h1>Modifica cliente</h1>
+
+@if (_model is null)
+{
+    <ErrorBox Message="@_error" />
+    if (_error is null)
+    {
+        <p class="muted">Caricamento&hellip;</p>
+    }
+}
+else
+{
+    <ClienteForm Model="_model" SubmitLabel="Salva" Busy="_busy" Error="@_error" FieldErrors="_fieldErrors"
+                 OnValidSubmit="SaveAsync" OnCancel="Cancel" />
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private ClienteFormModel? _model;
+    private bool _busy;
+    private string? _error;
+    private IReadOnlyDictionary<string, string>? _fieldErrors;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _model = null;
+        _error = null;
+        try
+        {
+            var dto = await Api.GetClienteAsync(Id);
+            if (dto is null)
+            {
+                _error = "Cliente non trovato.";
+                return;
+            }
+            _model = ClienteFormModel.FromDto(dto);
+        }
+        catch (Exception ex)
+        {
+            _error = ErrorMessages.From(ex);
+        }
+    }
+
+    private async Task SaveAsync(ClienteRequest request)
+    {
+        _busy = true;
+        _error = null;
+        _fieldErrors = null;
+        try
+        {
+            await Api.UpdateClienteAsync(Id, request);
+            Nav.NavigateTo($"clienti/{Id}");
+        }
+        catch (ApiException ex) when (ex.IsValidationError)
+        {
+            _fieldErrors = ErrorMessages.FieldErrors(ex);
+        }
+        catch (Exception ex)
+        {
+            _error = ErrorMessages.From(ex);
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+
+    private void Cancel() => Nav.NavigateTo($"clienti/{Id}");
+}

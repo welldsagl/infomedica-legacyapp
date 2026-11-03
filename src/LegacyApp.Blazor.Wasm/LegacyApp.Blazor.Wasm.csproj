@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <!--
+    Host Blazor WebAssembly "standalone": la UI gira NEL BROWSER (runtime .NET su WebAssembly).
+    L'output e' solo file statici (wwwroot + _framework): si pubblica su qualunque hosting statico/CDN.
+    Chiama l'API direttamente dal browser: l'origine di questa app deve stare in Cors:AllowedOrigins della API.
+    Qui non c'e' UI: le pagine stanno in LegacyApp.Blazor.Shared.
+  -->
+  <PropertyGroup>
+    <RootNamespace>LegacyApp.Blazor.Wasm</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../LegacyApp.Blazor.Shared/LegacyApp.Blazor.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

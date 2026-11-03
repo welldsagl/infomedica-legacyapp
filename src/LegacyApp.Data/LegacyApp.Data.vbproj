@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+      In VB il RootNamespace viene ANTEPOSTO a ogni blocco "Namespace" dei file:
+      "Namespace Entities" diventa LegacyApp.Data.Entities.
+      Negli "Imports" invece si usa sempre il nome completo.
+    -->
+    <RootNamespace>LegacyApp.Data</RootNamespace>
+    <AssemblyName>LegacyApp.Data</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFrameworkCore.Jet.OleDb" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <!-- Serve solo agli strumenti "dotnet ef" (es. dbcontext script), non va in produzione -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Imports globali (equivalente VB dei "global using" di C#) -->
+    <Import Include="System" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Threading" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+
+</Project>

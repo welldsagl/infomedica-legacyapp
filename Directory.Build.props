@@ -1,0 +1,27 @@
+<Project>
+  <!-- Impostazioni comuni a tutti i progetti della soluzione -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+
+    <!-- Opzioni VB: Strict On evita conversioni implicite e late binding (comportamento "alla C#") -->
+    <OptionStrict>On</OptionStrict>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionInfer>On</OptionInfer>
+    <OptionCompare>Binary</OptionCompare>
+
+    <!--
+      IMPORTANTE: il driver Access (ACE OLE DB / ODBC) e' nativo e ha una bitness.
+      Il processo deve avere la STESSA bitness del driver installato:
+        - ACE x64 (Office 64 bit o Access Database Engine 2016 x64)  -> x64
+        - ACE x86 (Office 32 bit)                                    -> x86
+      Quando sarete su SQL Server potrete tornare ad AnyCPU.
+      Solo su Windows: su macOS/Linux ACE non esiste e un assembly x64 non si carica su ARM
+      (si usa il provider SqlServer, vedi il profilo "http-sqlserver-docker").
+    -->
+    <PlatformTarget Condition="'$(OS)' == 'Windows_NT'">x64</PlatformTarget>
+
+    <Deterministic>true</Deterministic>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+</Project>

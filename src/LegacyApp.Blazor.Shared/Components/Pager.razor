@@ -1,0 +1,16 @@
+<div class="pager">
+    <button type="button" class="btn" disabled="@(Page <= 1)" @onclick="() => OnPageChanged.InvokeAsync(Page - 1)">
+        &lsaquo; Precedente
+    </button>
+    <span>Pagina @Page di @TotalPages &middot; @TotalCount clienti</span>
+    <button type="button" class="btn" disabled="@(Page >= TotalPages)" @onclick="() => OnPageChanged.InvokeAsync(Page + 1)">
+        Successiva &rsaquo;
+    </button>
+</div>
+
+@code {
+    [Parameter] public int Page { get; set; }
+    [Parameter] public int TotalPages { get; set; }
+    [Parameter] public int TotalCount { get; set; }
+    [Parameter] public EventCallback<int> OnPageChanged { get; set; }
+}

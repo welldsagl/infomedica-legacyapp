@@ -1,0 +1,84 @@
+@page "/"
+@page "/clienti"
+@inject LegacyApiClient Api
+@inject NavigationManager Nav
+
+<PageTitle>Clienti</PageTitle>
+
+<div class="page-header">
+    <h1>Clienti</h1>
+    <a class="btn btn-primary" href="clienti/nuovo">Nuovo cliente</a>
+</div>
+
+<ErrorBox Message="@_error" />
+
+@if (_result is null)
+{
+    if (_error is null)
+    {
+        <p class="muted">Caricamento&hellip;</p>
+    }
+}
+else if (_result.Items.Count == 0)
+{
+    <p class="muted">Nessun cliente.</p>
+}
+else
+{
+    <table class="grid">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ragione sociale</th>
+                <th>Partita IVA</th>
+                <th>Email</th>
+                <th>Inserito</th>
+                <th>Attivo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in _result.Items)
+            {
+                <tr class="row-link" @onclick="() => Open(c.Id)">
+                    <td>@c.Id</td>
+                    <td><a href="clienti/@c.Id">@c.RagioneSociale</a></td>
+                    <td>@Formatting.OrDash(c.PartitaIva)</td>
+                    <td>@Formatting.OrDash(c.Email)</td>
+                    <td>@Formatting.Data(c.DataInserimento)</td>
+                    <td>@(c.Attivo ? "Sì" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <Pager Page="_result.Page" TotalPages="_result.TotalPages" TotalCount="_result.TotalCount" OnPageChanged="GoToPage" />
+}
+
+@code {
+    private const int PageSize = 20;
+
+    // La pagina sta nell'URL (?page=N): link condivisibili e tasto "indietro", come nella SPA React.
+    [SupplyParameterFromQuery] public int? Page { get; set; }
+
+    private PagedResult<ClienteDto>? _result;
+    private string? _error;
+
+    // OnParametersSetAsync, non OnInitializedAsync: Blazor riusa il componente quando cambia solo la query string.
+    protected override async Task OnParametersSetAsync()
+    {
+        _error = null;
+        try
+        {
+            _result = await Api.GetClientiAsync(Math.Max(Page ?? 1, 1), PageSize);
+        }
+        catch (Exception ex)
+        {
+            _result = null;
+            _error = ErrorMessages.From(ex);
+        }
+    }
+
+    private void GoToPage(int page) => Nav.NavigateTo(Nav.GetUriWithQueryParameter("page", page));
+
+    private void Open(int id) => Nav.NavigateTo($"clienti/{id}");
+}

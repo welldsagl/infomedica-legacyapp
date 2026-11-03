@@ -1,0 +1,24 @@
+@inject LegacyApiClient Api
+
+@* Stato dell'API nell'header, come nel frontend React: "SqlServer · ok" *@
+<span class="api-status @_css" title="GET api/health">@_text</span>
+
+@code {
+    private string _text = "API: …";
+    private string _css = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var health = await Api.GetHealthAsync();
+            _text = $"{health.Provider} · {health.Status}";
+            _css = "ok";
+        }
+        catch (Exception)
+        {
+            _text = "API non raggiungibile";
+            _css = "ko";
+        }
+    }
+}

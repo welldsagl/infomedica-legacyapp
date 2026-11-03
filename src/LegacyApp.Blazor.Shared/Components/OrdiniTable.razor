@@ -1,0 +1,39 @@
+@if (Ordini.Count == 0)
+{
+    <p class="muted">Nessun ordine.</p>
+}
+else
+{
+    <table class="grid">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Data</th>
+                <th class="num">Importo</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var o in Ordini)
+            {
+                <tr>
+                    <td>@o.Id</td>
+                    <td>@Formatting.Data(o.DataOrdine)</td>
+                    <td class="num">@Formatting.Importo(o.Importo)</td>
+                    <td>@Formatting.OrDash(o.Note)</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2"><strong>Totale</strong></td>
+                <td class="num"><strong>@Formatting.Importo(Ordini.Sum(o => o.Importo))</strong></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+}
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<OrdineDto> Ordini { get; set; } = Array.Empty<OrdineDto>();
+}

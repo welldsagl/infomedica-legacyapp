@@ -1,0 +1,25 @@
+<Project>
+  <!--
+    Central Package Management: le versioni NuGet stanno solo qui.
+    I .vbproj dichiarano <PackageReference Include="..." /> senza Version.
+  -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Provider Access (community, CirrusRedOrg). Variante ODBC: EntityFrameworkCore.Jet.Odbc -->
+    <PackageVersion Include="EntityFrameworkCore.Jet.OleDb" Version="10.0.1" />
+
+    <!-- Provider target della migrazione -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3" />
+
+    <!-- Documento OpenAPI per la REST API (/openapi/v1.json) -->
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" />
+
+    <!-- Blazor (frontend .NET): libreria componenti condivisa e host WebAssembly -->
+    <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.3" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,41 @@
+@host = http://localhost:5080
+
+### Stato connessione (provider, bitness)
+GET {{host}}/api/health
+
+### Elenco paginato
+GET {{host}}/api/clienti?page=1&pageSize=20
+
+### Dettaglio
+GET {{host}}/api/clienti/1
+
+### Ordini di un cliente
+GET {{host}}/api/clienti/1/ordini
+
+### Creazione
+POST {{host}}/api/clienti
+Content-Type: application/json
+
+{
+  "ragioneSociale": "Rossi S.r.l.",
+  "partitaIva": "01234567890",
+  "email": "info@rossi.example",
+  "attivo": true
+}
+
+### Modifica
+PUT {{host}}/api/clienti/1
+Content-Type: application/json
+
+{
+  "ragioneSociale": "Rossi S.p.A.",
+  "partitaIva": "01234567890",
+  "email": "amministrazione@rossi.example",
+  "attivo": true
+}
+
+### Eliminazione
+DELETE {{host}}/api/clienti/1
+
+### Documento OpenAPI (solo Development)
+GET {{host}}/openapi/v1.json

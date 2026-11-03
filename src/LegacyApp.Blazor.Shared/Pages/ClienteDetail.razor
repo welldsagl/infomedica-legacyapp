@@ -1,0 +1,105 @@
+@page "/clienti/{Id:int}"
+@inject LegacyApiClient Api
+@inject NavigationManager Nav
+
+<PageTitle>@(_cliente?.RagioneSociale ?? "Cliente")</PageTitle>
+
+<p><a href="clienti">&lsaquo; Tutti i clienti</a></p>
+
+<ErrorBox Message="@_error" />
+
+@if (_loading)
+{
+    <p class="muted">Caricamento&hellip;</p>
+}
+else if (_cliente is null)
+{
+    if (_error is null)
+    {
+        <p class="muted">Cliente non trovato.</p>
+    }
+}
+else
+{
+    <div class="page-header">
+        <h1>@_cliente.RagioneSociale</h1>
+        <div class="actions">
+            <a class="btn" href="clienti/@Id/modifica">Modifica</a>
+            <button type="button" class="btn btn-danger" @onclick="() => _confirmDelete = true" disabled="@(_busy || _confirmDelete)">Elimina</button>
+        </div>
+    </div>
+
+    @if (_confirmDelete)
+    {
+        <div class="alert alert-warn">
+            <p>Eliminare il cliente <strong>@_cliente.RagioneSociale</strong>? L'operazione non &egrave; reversibile.</p>
+            <div class="actions">
+                <button type="button" class="btn" @onclick="() => _confirmDelete = false" disabled="@_busy">Annulla</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteAsync" disabled="@_busy">Conferma eliminazione</button>
+            </div>
+        </div>
+    }
+
+    <dl class="summary">
+        <dt>ID</dt><dd>@_cliente.Id</dd>
+        <dt>Partita IVA</dt><dd>@Formatting.OrDash(_cliente.PartitaIva)</dd>
+        <dt>Email</dt><dd>@Formatting.OrDash(_cliente.Email)</dd>
+        <dt>Inserito</dt><dd>@Formatting.DataOra(_cliente.DataInserimento)</dd>
+        <dt>Attivo</dt><dd>@(_cliente.Attivo ? "Sì" : "No")</dd>
+    </dl>
+
+    <h2>Ordini</h2>
+    <OrdiniTable Ordini="_ordini" />
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private ClienteDto? _cliente;
+    private IReadOnlyList<OrdineDto> _ordini = Array.Empty<OrdineDto>();
+    private bool _loading = true;
+    private bool _busy;
+    private bool _confirmDelete;
+    private string? _error;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _loading = true;
+        _error = null;
+        _confirmDelete = false;
+        try
+        {
+            _cliente = await Api.GetClienteAsync(Id);   // Nothing/null se 404
+            _ordini = _cliente is null ? Array.Empty<OrdineDto>() : await Api.GetOrdiniAsync(Id);
+        }
+        catch (Exception ex)
+        {
+            _cliente = null;
+            _error = ErrorMessages.From(ex);
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private async Task DeleteAsync()
+    {
+        _busy = true;
+        _error = null;
+        try
+        {
+            await Api.DeleteClienteAsync(Id);
+            Nav.NavigateTo("clienti");
+        }
+        catch (Exception ex)
+        {
+            _error = ErrorMessages.From(ex);
+            _confirmDelete = false;
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+}
