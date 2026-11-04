@@ -5,7 +5,8 @@ Scheletro di soluzione **VB.NET / .NET 10** che:
 - astrae il database Access legacy con **Entity Framework Core 10** (provider community `EntityFrameworkCore.Jet`);
 - espone i dati tramite una **REST API ASP.NET Core** (controller in VB);
 - include tre frontend di esempio sulla stessa API: **web React**, **web Blazor** (Server e WebAssembly, vedi `BLAZOR.md`) e **desktop WinForms in VB**;
-- permette di passare a **SQL Server** cambiando solo la configurazione.
+- permette di passare a **SQL Server** cambiando solo la configurazione;
+- ha CI su GitHub Actions e Dockerfile per il deploy (es. Railway), vedi `docs/DEPLOY-RAILWAY.md`.
 
 ## Struttura
 
@@ -39,6 +40,8 @@ LegacyApp.slnx
 ```
 
 Dipendenze:
+
+![Moduli e dipendenze](docs/architecture.png)
 
 ```
 WinForms ──────> Client ──HTTP──┐
