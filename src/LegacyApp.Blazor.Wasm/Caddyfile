@@ -1,0 +1,12 @@
+:{$PORT}
+
+root * /srv
+encode gzip
+
+# Blazor publish produce file .br/.gz accanto agli originali: Caddy li serve direttamente.
+file_server {
+	precompressed br gzip
+}
+
+# Routing lato client: ogni path sconosciuto torna a index.html
+try_files {path} /index.html
